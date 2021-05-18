@@ -5,8 +5,13 @@ const router = Router();
 const controller = new ChartsController();
 
 router.get(
-  '/cities',
-  (req: Request, res: Response, next: NextFunction) => controller.cities(req, res, next)
+  '/countries',
+  (req: Request, res: Response, next: NextFunction) => controller.countries(req, res, next)
+);
+
+router.get(
+  '/countries-list',
+  (req: Request, res: Response, next: NextFunction) => controller.countriesList(req, res, next)
 );
 
 

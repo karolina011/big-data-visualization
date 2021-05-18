@@ -1,27 +1,8 @@
 import React from "react";
-import {Button, Grid, MenuItem, Select, Slider} from "@material-ui/core";
-import {makeStyles} from '@material-ui/core/styles';
-import {aggregatedType, aggregatedTypes, SettingsI} from "../../Types/Settings";
-import {createDataServiceInstance} from "../../Services/service";
-
-const useStyles = makeStyles(() => ({
-    fieldContainer: {
-        padding: '2vw',
-        marginTop: '2vw',
-        textAlign: 'left'
-    },
-    label: {
-        fontSize: '1.175rem',
-        fontWeight: 500,
-        marginBottom: '1vw'
-    },
-    field: {
-        backgroundColor: 'white',
-        borderRadius: '5px',
-        padding: '10px',
-        width: '100%',
-    },
-}));
+import {Button, Grid, Slider} from "@material-ui/core";
+import {AggregatedType, aggregatedTypes, Continents, SettingsI} from "../../Types/Settings";
+import AggregatedSection from "./Sections/AggregatedSection";
+import useStyles from "./Settings.style";
 
 interface SettingsProps {
     onSaveFunc: (settings: SettingsI) => void;
@@ -33,30 +14,52 @@ const Settings: React.FC<SettingsProps> = ({onSaveFunc}) => {
     const [yearsRange, setYearsRange] = React.useState<number[]>([1970, 2018]);
 
     const [settings, setSettings] = React.useState<SettingsI>({
-        aggregatedBy: aggregatedTypes.CONTINENT,
-        minYear: 1970,
-        maxYear: 2018,
+        aggregated: {
+            type: aggregatedTypes.CONTINENT,
+            allowedContinents: Object.values(Continents),
+            allowedCountry: '',
+        },
+        yearsRange: {
+            min: 1970,
+            max: 2018,
+        },
+        top: {
+            amount: 10
+        }
     });
 
-    const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const handleTypeChange = (type: AggregatedType) => {
         setSettings({
             ...settings,
-            aggregatedBy: event.target.value as aggregatedType
+            aggregated: {
+                ...settings.aggregated,
+                type: type as AggregatedType
+            }
         });
     };
 
-    const handleChangeSlider = (event: any, newValue: number | number[]) => {
+
+    const handleAggregationChange = (aggregationSets: SettingsI['aggregated']) => {
+        setSettings({
+            ...settings,
+            aggregated: aggregationSets
+        });
+    };
+
+    const handleChangeYearsSlider = (event: any, newValue: number | number[]) => {
         if (typeof newValue !== 'object'){
             return;
         }
 
         setYearsRange(newValue);
 
-        const [minYear, maxYear] = newValue;
+        const [min, max] = newValue;
         setSettings({
             ...settings,
-            minYear,
-            maxYear,
+            yearsRange: {
+                min,
+                max
+            }
         })
     };
 
@@ -67,24 +70,40 @@ const Settings: React.FC<SettingsProps> = ({onSaveFunc}) => {
     return (
         <>
             <Grid container>
-                <Grid item xs={12} className={classes.fieldContainer}>
-                    <Grid item xs={12} className={classes.label}>
-                        Aggregated by:
-                    </Grid>
-                    <Grid item xs={12} >
-                        <Select
-                            labelId="demo-simple-select-filled-label"
-                            id="demo-simple-select-filled"
-                            value={settings.aggregatedBy}
-                            onChange={handleChange}
-                            className={classes.field}
-                        >
-                            <MenuItem value={aggregatedTypes.CONTINENT}>{aggregatedTypes.CONTINENT}</MenuItem>
-                            <MenuItem value={aggregatedTypes.COUNTRY}>{aggregatedTypes.COUNTRY}</MenuItem>
-                            <MenuItem value={aggregatedTypes.CITY}>{aggregatedTypes.CITY}</MenuItem>
-                        </Select>
-                    </Grid>
-                </Grid>
+                <AggregatedSection settings={settings.aggregated} onChangeFunc={handleAggregationChange}/>
+                {/*<Grid item xs={12} className={classes.fieldContainer}>*/}
+                {/*    <Grid item xs={12} className={classes.label}>*/}
+                {/*        Aggregated by:*/}
+                {/*    </Grid>*/}
+                {/*    <Grid item xs={12} >*/}
+                {/*        <Select*/}
+                {/*            labelId="demo-simple-select-filled-label"*/}
+                {/*            id="demo-simple-select-filled"*/}
+                {/*            value={settings.aggregatedBy}*/}
+                {/*            onChange={handleChange}*/}
+                {/*            className={classes.field}*/}
+                {/*        >*/}
+                {/*            <MenuItem value={aggregatedTypes.CONTINENT}>{aggregatedTypes.CONTINENT}</MenuItem>*/}
+                {/*            <MenuItem value={aggregatedTypes.COUNTRY}>{aggregatedTypes.COUNTRY}</MenuItem>*/}
+                {/*            <MenuItem value={aggregatedTypes.CITY}>{aggregatedTypes.CITY}</MenuItem>*/}
+                {/*        </Select>*/}
+                {/*    </Grid>*/}
+
+                {/*    {settings.aggregatedBy === aggregatedTypes.COUNTRY &&*/}
+
+                {/*        <Grid item xs={12} >*/}
+                {/*            {*/}
+                {/*                Object.values(Continents).map((country :Continent) => {*/}
+                {/*                    return <Checkbox*/}
+                {/*                        checked={settings.allowedContinents?.includes(country)}*/}
+                {/*                        color="primary"*/}
+                {/*                        inputProps={{ 'aria-label': 'secondary checkbox' }}*/}
+                {/*                    />*/}
+                {/*                })*/}
+                {/*            }*/}
+                {/*        </Grid>*/}
+                {/*    }*/}
+                {/*</Grid>*/}
 
                 <Grid item xs={12} className={classes.fieldContainer}>
                     <Grid item xs={12} className={classes.label}>
@@ -95,7 +114,7 @@ const Settings: React.FC<SettingsProps> = ({onSaveFunc}) => {
                             min={1970}
                             max={2018}
                             value={yearsRange}
-                            onChange={handleChangeSlider}
+                            onChange={handleChangeYearsSlider}
                             valueLabelDisplay="auto"
                             aria-labelledby="range-slider"
                         />

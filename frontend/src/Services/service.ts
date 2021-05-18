@@ -1,6 +1,6 @@
 // import axios, {AxiosInstance, AxiosResponse} from "axios";
 import {loadSettings} from "../Config";
-import {SettingsI} from "../Types/Settings";
+import {Continent, SettingsI} from "../Types/Settings";
 import axios, {AxiosInstance} from "axios";
 
 
@@ -29,7 +29,11 @@ export default class DataService {
      * @returns {Promise<CheckinsChart>}
      */
     async loadChartData(params: SettingsI): Promise<any> {
-        return this.client.get('/charts/cities', {params}).then(data => data.data);
+        return this.client.get('/charts/countries', {params}).then(data => data.data);
+    }
+
+    async loadCountriesList(): Promise<any> {
+        return this.client.get('/charts/countries-list').then(data => data.data);
     }
 }
 

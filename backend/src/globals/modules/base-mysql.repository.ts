@@ -28,7 +28,6 @@ export default class BaseMysqlRepository {
     try {
       const connection = await this.client.awaitGetConnection();
       const response = await connection.awaitQuery(queryTextOrConfig, values);
-      console.log(connection);
       // @ts-ignore
       connection.release();
 
