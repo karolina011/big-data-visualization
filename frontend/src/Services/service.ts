@@ -29,7 +29,7 @@ export default class DataService {
      * @returns {Promise<CheckinsChart>}
      */
     async loadChartData(params: SettingsI): Promise<any> {
-        return this.client.get('/charts/countries', {params}).then(data => data.data);
+        return this.client.get('/charts/chart-data', {params}).then(data => data.data);
     }
 
     async loadCountriesList(): Promise<any> {

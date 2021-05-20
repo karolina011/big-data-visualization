@@ -1,8 +1,11 @@
 import React from "react";
-import {Button, Grid, Slider} from "@material-ui/core";
-import {AggregatedType, aggregatedTypes, Continents, SettingsI} from "../../Types/Settings";
+import {Button, Grid} from "@material-ui/core";
+import {AggregatedType, aggregatedTypes, AttackTypes, Continents, SettingsI} from "../../Types/Settings";
 import AggregatedSection from "./Sections/AggregatedSection";
 import useStyles from "./Settings.style";
+import YearsRangeSection from "./Sections/YearsRangeSection";
+import LimitSection from "./Sections/LimitSection";
+import AttackTypeSection from "./Sections/AttackTypeSection";
 
 interface SettingsProps {
     onSaveFunc: (settings: SettingsI) => void;
@@ -11,7 +14,6 @@ interface SettingsProps {
 const Settings: React.FC<SettingsProps> = ({onSaveFunc}) => {
 
     const classes = useStyles();
-    const [yearsRange, setYearsRange] = React.useState<number[]>([1970, 2018]);
 
     const [settings, setSettings] = React.useState<SettingsI>({
         aggregated: {
@@ -25,6 +27,9 @@ const Settings: React.FC<SettingsProps> = ({onSaveFunc}) => {
         },
         top: {
             amount: 10
+        },
+        attackType: {
+            type: AttackTypes.ALL
         }
     });
 
@@ -46,21 +51,25 @@ const Settings: React.FC<SettingsProps> = ({onSaveFunc}) => {
         });
     };
 
-    const handleChangeYearsSlider = (event: any, newValue: number | number[]) => {
-        if (typeof newValue !== 'object'){
-            return;
-        }
-
-        setYearsRange(newValue);
-
-        const [min, max] = newValue;
+    const handleYearsRangeChange = (yearsRangeSets: SettingsI['yearsRange']) => {
         setSettings({
             ...settings,
-            yearsRange: {
-                min,
-                max
-            }
-        })
+            yearsRange: yearsRangeSets
+        });
+    };
+
+    const handleLimitChange = (limitSets: SettingsI['top']) => {
+        setSettings({
+            ...settings,
+            top: limitSets
+        });
+    };
+
+    const handleAttackTypeChange = (attackTypeSets: SettingsI['attackType']) => {
+        setSettings({
+            ...settings,
+            attackType: attackTypeSets
+        });
     };
 
     const onSave = () => {
@@ -71,55 +80,9 @@ const Settings: React.FC<SettingsProps> = ({onSaveFunc}) => {
         <>
             <Grid container>
                 <AggregatedSection settings={settings.aggregated} onChangeFunc={handleAggregationChange}/>
-                {/*<Grid item xs={12} className={classes.fieldContainer}>*/}
-                {/*    <Grid item xs={12} className={classes.label}>*/}
-                {/*        Aggregated by:*/}
-                {/*    </Grid>*/}
-                {/*    <Grid item xs={12} >*/}
-                {/*        <Select*/}
-                {/*            labelId="demo-simple-select-filled-label"*/}
-                {/*            id="demo-simple-select-filled"*/}
-                {/*            value={settings.aggregatedBy}*/}
-                {/*            onChange={handleChange}*/}
-                {/*            className={classes.field}*/}
-                {/*        >*/}
-                {/*            <MenuItem value={aggregatedTypes.CONTINENT}>{aggregatedTypes.CONTINENT}</MenuItem>*/}
-                {/*            <MenuItem value={aggregatedTypes.COUNTRY}>{aggregatedTypes.COUNTRY}</MenuItem>*/}
-                {/*            <MenuItem value={aggregatedTypes.CITY}>{aggregatedTypes.CITY}</MenuItem>*/}
-                {/*        </Select>*/}
-                {/*    </Grid>*/}
-
-                {/*    {settings.aggregatedBy === aggregatedTypes.COUNTRY &&*/}
-
-                {/*        <Grid item xs={12} >*/}
-                {/*            {*/}
-                {/*                Object.values(Continents).map((country :Continent) => {*/}
-                {/*                    return <Checkbox*/}
-                {/*                        checked={settings.allowedContinents?.includes(country)}*/}
-                {/*                        color="primary"*/}
-                {/*                        inputProps={{ 'aria-label': 'secondary checkbox' }}*/}
-                {/*                    />*/}
-                {/*                })*/}
-                {/*            }*/}
-                {/*        </Grid>*/}
-                {/*    }*/}
-                {/*</Grid>*/}
-
-                <Grid item xs={12} className={classes.fieldContainer}>
-                    <Grid item xs={12} className={classes.label}>
-                        Year's Range:
-                    </Grid>
-                    <Grid item xs={12} >
-                        <Slider
-                            min={1970}
-                            max={2018}
-                            value={yearsRange}
-                            onChange={handleChangeYearsSlider}
-                            valueLabelDisplay="auto"
-                            aria-labelledby="range-slider"
-                        />
-                    </Grid>
-                </Grid>
+                <YearsRangeSection settings={settings.yearsRange} onChangeFunc={handleYearsRangeChange}/>
+                <LimitSection settings={settings.top} onChangeFunc={handleLimitChange}/>
+                <AttackTypeSection settings={settings.attackType} onChangeFunc={handleAttackTypeChange}/>
 
                 <Grid item xs={12} className={classes.fieldContainer}>
                     <Button

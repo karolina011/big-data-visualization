@@ -31,6 +31,30 @@ export enum AggregatedTypes {
 
 export type AggregatedType = AggregatedTypes.CONTINENT | AggregatedTypes.COUNTRY | AggregatedTypes.CITY
 
+export enum AttackTypes {
+    ALL                     = 'All',
+    ARMED_ASSAULT           = 'Armed Assault',
+    ASSASSINATION           = 'Assassination',
+    BOMBING_EXPLOSION       = 'Bombing/Explosion',
+    FACILITY_INFRASTRUCTURE = 'Facility/Infrastructure Attack',
+    HIJACKING               = 'Hijacking',
+    BARRICADE_INCIDENT      = 'Hostage Taking (Barricade Incident)',
+    KIDNAPPING              = 'Hostage Taking (Kidnapping)',
+    UNARMED_ASSAULT         = 'Unarmed Assault',
+    UNKNOWN                 = 'Unknown',
+}
+
+export type AttackType = AttackTypes.ARMED_ASSAULT |
+    AttackTypes.ASSASSINATION |
+    AttackTypes.BOMBING_EXPLOSION |
+    AttackTypes.FACILITY_INFRASTRUCTURE |
+    AttackTypes.HIJACKING |
+    AttackTypes.BARRICADE_INCIDENT |
+    AttackTypes.KIDNAPPING |
+    AttackTypes.UNARMED_ASSAULT |
+    AttackTypes.UNKNOWN |
+    AttackTypes.ALL
+
 export interface ChartsParams {
     aggregated: {
         type: AggregatedType,
@@ -43,5 +67,8 @@ export interface ChartsParams {
     };
     top?: {
         amount: number
+    },
+    attackType: {
+        type: AttackTypes.ALL
     }
 }

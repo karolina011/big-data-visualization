@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import Charts from "./Charts/Charts";
 import {Grid} from "@material-ui/core";
 import Settings from "./Settings/Settings";
-import {aggregatedTypes, Continents, SettingsI} from "../Types/Settings";
+import {aggregatedTypes, AttackTypes, Continents, SettingsI} from "../Types/Settings";
 import {createDataServiceInstance} from "../Services/service";
 import {CountryChartData} from "../Types/Charts";
 import {makeStyles} from "@material-ui/core/styles";
@@ -12,6 +12,9 @@ const useStyles = makeStyles(() => ({
     settingsContainer: {
         boxShadow: '0px -1px 16px 0px rgba(50, 50, 50, 0.42)',
         height: '100vh'
+    },
+    mainPageContainer: {
+        padding: '2vw'
     }
 }));
 
@@ -34,7 +37,10 @@ const MainPage = () => {
                 max: 2018,
             },
             top: {
-                amount: 10
+                amount: 20
+            },
+            attackType: {
+                type: AttackTypes.ALL
             }
         });
         setVisualizationData(data);
@@ -46,6 +52,8 @@ const MainPage = () => {
 
     const onSave = async (settings: SettingsI) => {
         const data = await service.loadChartData(settings);
+        console.log(settings);
+        console.log(data);
         setVisualizationData(data);
     };
 
@@ -55,12 +63,14 @@ const MainPage = () => {
                 <Grid item sm={3} className={classes.settingsContainer}>
                     <Settings onSaveFunc={onSave}/>
                 </Grid>
-                <Grid item sm={9}>
+                <Grid item sm={9} className={classes.mainPageContainer}>
 
                     <p>Main PAge</p>
                     {/*<Maps/>*/}
 
+                    {visualizationData?.length > 0 &&
                     <Charts data={visualizationData}/>
+                    }
                 </Grid>
             </Grid>
         </>

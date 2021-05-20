@@ -67,6 +67,21 @@ const AggregatedSection: React.FC<AggregatedSectionProps> = ({settings, onChange
         onChangeFunc(newSets);
     };
 
+    const handleCityChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+
+        if (typeof event.target.value !== 'string'){
+            return;
+        }
+
+        const newSets = {
+            ...actualSets,
+            allowedCountry: event.target.value as string,
+        };
+
+        setActualSets(newSets);
+        onChangeFunc(newSets);
+    };
+
     return (
         <Grid item xs={12} className={classes.fieldContainer}>
             <Grid item xs={12} className={classes.label}>
@@ -117,8 +132,9 @@ const AggregatedSection: React.FC<AggregatedSectionProps> = ({settings, onChange
                         <Select
                             labelId="demo-simple-select-filled-label"
                             id="country-select"
-                            value={countriesList[0].name}
-                            onChange={handleTypeChange}
+                            // @ts-ignore
+                            value={actualSets?.allowedCountry?.length > 0 ? actualSets.allowedCountry : countriesList[0].name}
+                            onChange={handleCityChange}
                             className={classes.field}
                         >
                             {

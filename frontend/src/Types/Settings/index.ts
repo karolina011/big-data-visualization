@@ -16,6 +16,30 @@ export enum Continents {
 
 export type Continent = Continents.SOUTH_AMERICA | Continents.NORTH_AMERICA | Continents.EUROPE | Continents.ASIA | Continents.AUSTRALIA
 
+export enum AttackTypes {
+    ALL                     = 'All',
+    ARMED_ASSAULT           = 'Armed Assault',
+    ASSASSINATION           = 'Assassination',
+    BOMBING_EXPLOSION       = 'Bombing/Explosion',
+    FACILITY_INFRASTRUCTURE = 'Facility/Infrastructure Attack',
+    HIJACKING               = 'Hijacking',
+    BARRICADE_INCIDENT      = 'Hostage Taking (Barricade Incident)',
+    KIDNAPPING              = 'Hostage Taking (Kidnapping)',
+    UNARMED_ASSAULT         = 'Unarmed Assault',
+    UNKNOWN                 = 'Unknown',
+}
+
+export type AttackType = AttackTypes.ARMED_ASSAULT |
+    AttackTypes.ASSASSINATION |
+    AttackTypes.BOMBING_EXPLOSION |
+    AttackTypes.FACILITY_INFRASTRUCTURE |
+    AttackTypes.HIJACKING |
+    AttackTypes.BARRICADE_INCIDENT |
+    AttackTypes.KIDNAPPING |
+    AttackTypes.UNARMED_ASSAULT |
+    AttackTypes.UNKNOWN |
+    AttackTypes.ALL
+
 export interface SettingsI {
     aggregated: {
         type: AggregatedType,
@@ -29,5 +53,7 @@ export interface SettingsI {
     top?: {
         amount: number
     }
-
+    attackType: {
+        type: AttackType
+    }
 }
