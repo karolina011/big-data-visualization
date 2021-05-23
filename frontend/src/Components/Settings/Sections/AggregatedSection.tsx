@@ -24,6 +24,8 @@ const AggregatedSection: React.FC<AggregatedSectionProps> = ({settings, onChange
         allowedCountry: ''
     });
 
+    console.log(settings);
+
     const loadCountriesList = async () => {
         const data = await service.loadCountriesList();
         setCountriesList(data);
@@ -56,11 +58,17 @@ const AggregatedSection: React.FC<AggregatedSectionProps> = ({settings, onChange
 
     const handleAllowedContinentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const checked :boolean = event.target.checked;
-        const id :string = event.target.id;
+        const continentName: Continent = event.target.id as Continent;
+
+        let allowedContinents = actualSets.allowedContinents.filter(country => country !== continentName);
+        if(checked) {
+            actualSets.allowedContinents.push(continentName);
+            allowedContinents = actualSets.allowedContinents;
+        }
 
         const newSets = {
             ...actualSets,
-            allowedContinents: checked ? {...actualSets.allowedContinents, id} : actualSets.allowedContinents.filter(country => country !== id)
+            allowedContinents
         };
 
         setActualSets(newSets);

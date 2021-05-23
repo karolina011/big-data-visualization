@@ -1,5 +1,5 @@
 import BaseMysqlRepository from "../../globals/modules/base-mysql.repository";
-import {AttackTypes, ChartsParams} from "./types";
+import {AttackType, AttackTypes, ChartsParams} from "./types";
 
 
 export default class ChartsRepository extends BaseMysqlRepository {
@@ -31,14 +31,26 @@ export default class ChartsRepository extends BaseMysqlRepository {
    */
   async getByCountries(requestParams: ChartsParams, allowedRegions: string[]): Promise<any> {
 
+      const specifyAttack = requestParams.attackType.type && requestParams.attackType.type !== AttackTypes.ALL;
+
+      let bindsParams: any = [
+          allowedRegions
+      ];
+
+      if (specifyAttack){
+          bindsParams.push(requestParams.attackType.type);
+      }
+
+      bindsParams.push(
+          requestParams?.yearsRange?.min ?? 1970,
+          requestParams.yearsRange.max ?? 2018,
+          requestParams.top?.amount ?? 10
+      );
+
+
     return this.query(
-        'SELECT count(eventid) as value, country_txt as name, iyear FROM attacks WHERE attacktype1_txt = ? AND iyear BETWEEN ? AND ? GROUP BY country_txt  ORDER BY value DESC ' + (requestParams.top ? ' LIMIT ? ' : ''),
-        [
-            (requestParams.attackType.type && requestParams.attackType.type !== AttackTypes.ALL) ? requestParams.attackType.type : AttackTypes.ALL,
-            requestParams.yearsRange.min,
-            requestParams.yearsRange.max,
-            requestParams.top?.amount
-        ]);
+        'SELECT count(eventid) as value, country_txt as name, iyear FROM attacks WHERE region_txt IN (?) ' +  (specifyAttack ? ' AND attacktype1_txt = ? ' : '') + ' AND iyear BETWEEN ? AND ? GROUP BY country_txt  ORDER BY value DESC ' + (requestParams.top ? ' LIMIT ? ' : ''),
+        bindsParams);
 
   }
 
@@ -48,16 +60,25 @@ export default class ChartsRepository extends BaseMysqlRepository {
      */
     async getByCity(requestParams: ChartsParams): Promise<any> {
 
+        const specifyAttack = requestParams.attackType.type && requestParams.attackType.type !== AttackTypes.ALL;
+
+        let bindsParams: any = [
+            requestParams.aggregated.allowedCountry ?? 'Afghanistan',
+        ];
+
+        if (specifyAttack){
+            bindsParams.push(requestParams.attackType.type);
+        }
+
+        bindsParams.push(
+            requestParams?.yearsRange?.min ?? 1970,
+            requestParams.yearsRange.max ?? 2018,
+            requestParams.top?.amount ?? 10
+        );
+
         return this.query(
-            'SELECT count(eventid) as value, city as name, iyear FROM attacks WHERE country_txt = ? AND city != ? AND attacktype1_txt LIKE ? AND iyear BETWEEN ? AND ? GROUP BY city  ORDER BY value DESC ' + (requestParams.top ? ' LIMIT ? ' : ''),
-            [
-                requestParams.aggregated.allowedCountry ?? 'Afghanistan',
-                '',
-                (requestParams.attackType.type && requestParams.attackType?.type !== AttackTypes.ALL) ? requestParams.attackType.type :  '%%' ,
-                requestParams.yearsRange.min ?? 1970,
-                requestParams.yearsRange.max ?? 2018,
-                requestParams.top?.amount ?? 10
-            ]);
+            'SELECT count(eventid) as value, city as name, iyear FROM attacks WHERE country_txt = ? ' +  (specifyAttack ? ' AND attacktype1_txt = ? ' : '') + '  AND iyear BETWEEN ? AND ? GROUP BY city  ORDER BY value DESC ' + (requestParams.top ? ' LIMIT ? ' : ''),
+            bindsParams);
 
     }
 
@@ -75,9 +96,5 @@ export default class ChartsRepository extends BaseMysqlRepository {
             requestParams.yearsRange.max,
             requestParams.top?.amount
         ]);
-    //
-    // return this.query(
-    //     'SELECT region_txt FROM attacks GROUP BY region_txt',
-    //     []);
   }
 }

@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import ChartsRepository from "./charts.repository";
-import {AggregatedTypes, ChartsParams} from "./types";
+import {AggregatedTypes, Continents, RegionGroups} from "./types";
 
 export default class ChartsController {
 
@@ -12,7 +12,8 @@ export default class ChartsController {
       params.yearsRange = params.yearsRange ? JSON.parse(params.yearsRange as unknown as string) : undefined;
       params.top = params.top ? JSON.parse(params.top as unknown as string) : undefined;
       params.attackType = params.attackType ? JSON.parse(params.attackType as unknown as string) : undefined;
-
+      //@ts-ignore
+      const allowedRegions = this.getParsedContinents(params.aggregated.allowedContinents);
       const repo = new ChartsRepository();
 
       let body = {};
@@ -24,7 +25,7 @@ export default class ChartsController {
           break;
         case AggregatedTypes.COUNTRY:
           //@ts-ignore
-          body = await repo.getByCountries(params, []);
+          body = await repo.getByCountries(params, allowedRegions);
           break;
         case AggregatedTypes.CONTINENT:
           // body = await repo.getByCountries(params);
@@ -53,4 +54,16 @@ export default class ChartsController {
     }
   }
 
+  getParsedContinents(allowedContinents: string[]) {
+
+    let allowed :string[] = [];
+
+    for (let item of Object.values(Continents)) {
+      if (allowedContinents.includes(item)){
+        allowed =allowed.concat(RegionGroups[item])
+      }
+    }
+
+    return allowed;
+  }
 }

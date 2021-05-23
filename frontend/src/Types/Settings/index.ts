@@ -12,9 +12,10 @@ export enum Continents {
     EUROPE          = 'Europe',
     ASIA            = 'Asia',
     AUSTRALIA       = 'Australia',
+    AFRICA          = 'Africa',
 }
 
-export type Continent = Continents.SOUTH_AMERICA | Continents.NORTH_AMERICA | Continents.EUROPE | Continents.ASIA | Continents.AUSTRALIA
+export type Continent = Continents.SOUTH_AMERICA | Continents.NORTH_AMERICA | Continents.EUROPE | Continents.ASIA | Continents.AUSTRALIA | Continents.AFRICA
 
 export enum AttackTypes {
     ALL                     = 'All',

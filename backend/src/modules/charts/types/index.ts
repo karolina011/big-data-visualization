@@ -4,9 +4,10 @@ export enum Continents {
     EUROPE          = 'Europe',
     ASIA            = 'Asia',
     AUSTRALIA       = 'Australia',
+    AFRICA          = 'Africa',
 }
 
-export type Continent = Continents.SOUTH_AMERICA | Continents.NORTH_AMERICA | Continents.EUROPE | Continents.ASIA | Continents.AUSTRALIA
+export type Continent = Continents.SOUTH_AMERICA | Continents.NORTH_AMERICA | Continents.EUROPE | Continents.ASIA | Continents.AUSTRALIA | Continents.AFRICA
 
 export enum DbRegions  {
      CENTRAL_ASIA               = 'Central Asia',
@@ -22,6 +23,34 @@ export enum DbRegions  {
      SOUTH_AMERICA              = 'South America',
      CENTRAL_AMERICA_CARIBBEAN  = 'Central America & Caribbean',
 }
+
+export const RegionGroups = {
+    [Continents.SOUTH_AMERICA]: [
+        DbRegions.SOUTH_AMERICA,
+        DbRegions.CENTRAL_AMERICA_CARIBBEAN,
+    ],
+    [Continents.NORTH_AMERICA]: [
+        DbRegions.NORTH_AMERICA,
+        DbRegions.CENTRAL_AMERICA_CARIBBEAN,
+    ],
+    [Continents.EUROPE]: [
+        DbRegions.EASTERN_EUROPE,
+        DbRegions.WESTERN_EUROPE,
+    ],
+    [Continents.ASIA]: [
+        DbRegions.CENTRAL_ASIA,
+        DbRegions.EAST_ASIA,
+        DbRegions.SOUTH_ASIA,
+        DbRegions.SOUTHEAST_ASIA,
+    ],
+    [Continents.AUSTRALIA]: [
+        DbRegions.AUSTRALIA_AND_OCEANIA
+    ],
+    [Continents.AFRICA]: [
+        DbRegions.MIDDLE_EAST_NORTH_AFRICA,
+        DbRegions.SUB_SAHARAN_AFRICA
+    ]
+};
 
 export enum AggregatedTypes {
     CONTINENT   = 'Continent',
@@ -69,6 +98,6 @@ export interface ChartsParams {
         amount: number
     },
     attackType: {
-        type: AttackTypes.ALL
+        type: AttackType
     }
 }
