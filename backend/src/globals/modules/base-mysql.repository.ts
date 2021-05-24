@@ -26,10 +26,12 @@ export default class BaseMysqlRepository {
     values?: I,
   ): Promise<Query | undefined> {
     try {
+
       const connection = await this.client.awaitGetConnection();
       const response = await connection.awaitQuery(queryTextOrConfig, values);
       // @ts-ignore
       connection.release();
+
 
       console.log(JSON.stringify({query: queryTextOrConfig, values}));
       return response;

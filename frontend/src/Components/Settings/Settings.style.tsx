@@ -26,6 +26,8 @@ const useStyles = makeStyles(() => ({
         marginTop: '1vw'
     },
     chartContainer: {
+        height: '460px',
+        marginTop: '2vw',
         boxShadow: '0px -1px 16px 0px rgba(50, 50, 50, 0.42)',
     },
     chartTitle: {

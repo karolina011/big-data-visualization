@@ -28,6 +28,7 @@ const AggregatedSection: React.FC<AggregatedSectionProps> = ({settings, onChange
 
     const loadCountriesList = async () => {
         const data = await service.loadCountriesList();
+        console.log(data);
         setCountriesList(data);
 
         const newSets = {
