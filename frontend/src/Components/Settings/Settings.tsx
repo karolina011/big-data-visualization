@@ -80,11 +80,11 @@ const Settings: React.FC<SettingsProps> = ({onSaveFunc}) => {
         <>
             <Grid container>
                 <AggregatedSection settings={settings.aggregated} onChangeFunc={handleAggregationChange}/>
-                <YearsRangeSection settings={settings.yearsRange} onChangeFunc={handleYearsRangeChange}/>
-                {settings.aggregated.type !== aggregatedTypes.CONTINENT &&
-                    <LimitSection settings={settings.top} onChangeFunc={handleLimitChange}/>
-                }
-                <AttackTypeSection settings={settings.attackType} onChangeFunc={handleAttackTypeChange}/>
+                {/*<YearsRangeSection settings={settings.yearsRange} onChangeFunc={handleYearsRangeChange}/>*/}
+                {/*{settings.aggregated.type !== aggregatedTypes.CONTINENT &&*/}
+                {/*    <LimitSection settings={settings.top} onChangeFunc={handleLimitChange}/>*/}
+                {/*}*/}
+                {/*<AttackTypeSection settings={settings.attackType} onChangeFunc={handleAttackTypeChange}/>*/}
 
                 <Grid item xs={12} className={classes.fieldContainer}>
                     <Button

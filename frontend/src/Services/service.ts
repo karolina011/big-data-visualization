@@ -1,6 +1,6 @@
 // import axios, {AxiosInstance, AxiosResponse} from "axios";
 import {loadSettings} from "../Config";
-import {Continent, SettingsI} from "../Types/Settings";
+import {AggregatedType, SettingsI} from "../Types/Settings";
 import axios, {AxiosInstance} from "axios";
 
 
@@ -23,14 +23,25 @@ export default class DataService {
         });
     }
 
-    /**
-     *
-     * @param {CheckinsChartFilters} params
-     * @returns {Promise<CheckinsChart>}
-     */
-    async loadChartData(params: SettingsI): Promise<any> {
+    async loadChartData(params: SettingsI, hierarchical: boolean): Promise<any> {
+        if(hierarchical){
+
+        }
         return this.client.get('/charts/chart-data', {params}).then(data => data.data);
-    }
+    };
+
+
+
+
+
+    // /**
+    //  *
+    //  * @param {CheckinsChartFilters} params
+    //  * @returns {Promise<CheckinsChart>}
+    //  */
+    // async loadChartData(params: SettingsI): Promise<any> {
+    //     return this.client.get('/charts/chart-data', {params}).then(data => data.data);
+    // }
 
     async loadCountriesList(): Promise<any> {
         return this.client.get('/charts/countries-list').then(data => data.data);

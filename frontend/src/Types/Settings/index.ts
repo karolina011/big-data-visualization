@@ -57,4 +57,5 @@ export interface SettingsI {
     attackType: {
         type: AttackType
     }
+    dataType?: AggregatedType
 }

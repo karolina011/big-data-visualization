@@ -26,13 +26,20 @@ const useStyles = makeStyles(() => ({
         marginTop: '1vw'
     },
     chartContainer: {
-        height: '460px',
+        height: '700px',
         marginTop: '2vw',
+        paddingBottom: '20px',
         boxShadow: '0px -1px 16px 0px rgba(50, 50, 50, 0.42)',
     },
     chartTitle: {
-        fontWeight: 500,
+        fontWeight: 700,
         fontSize: '1.775rem',
+        color: '#616161',
+        margin: '1vw 0'
+    },
+    time: {
+        fontWeight: 700,
+        fontSize: '1.375rem',
         color: '#616161',
         margin: '1vw 0'
     }

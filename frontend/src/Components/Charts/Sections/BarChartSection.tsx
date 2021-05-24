@@ -1,5 +1,5 @@
 import React from "react";
-import {CountryChartData} from "../../../Types/Charts";
+import {ChartData} from "../../../Types/Charts";
 import {
     BarChart,
     Bar,
@@ -13,7 +13,7 @@ import {Grid} from "@material-ui/core";
 import useStyles from "../../Settings/Settings.style";
 
 interface BarChartSectionProps {
-    data: CountryChartData[]
+    data: ChartData[]
 }
 
 const BarChartSection: React.FC<BarChartSectionProps> = ({data}) => {

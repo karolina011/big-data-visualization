@@ -1,19 +1,19 @@
 import React from "react";
-import {CountryChartData} from "../../Types/Charts";
 import PieChartSection from "./Sections/PieChartSection";
-import BarChartSection from "./Sections/BarChartSection";
+import {ChartsDataI} from "../MainPage";
 
 interface ChartsProps {
-    data: CountryChartData[]
+    data: ChartsDataI
 }
 
-const Charts: React.FC<ChartsProps> = ({data= []}) => {
+const Charts: React.FC<ChartsProps> = ({data}) => {
 
 
     return (
         <>
-            <PieChartSection data={data}/>
-            <BarChartSection data={data}/>
+            <PieChartSection hierarchicalData={data.hierarchical.continents} notHierarchicalData={data.notHierarchical.continents}/>
+            {/*<PieChartSection hierarchicalData={data.hierarchical.countries} notHierarchicalData={data.notHierarchical.countries}/>*/}
+            {/*<PieChartSection hierarchicalData={data.hierarchical.cities} notHierarchicalData={data.notHierarchical.cities}/>*/}
         </>
     );
 };
