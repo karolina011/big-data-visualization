@@ -99,5 +99,6 @@ export interface ChartsParams {
     },
     attackType: {
         type: AttackType
-    }
+    },
+    dataType?: AggregatedType
 }

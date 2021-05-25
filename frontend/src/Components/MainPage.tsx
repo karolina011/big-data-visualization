@@ -75,10 +75,16 @@ const MainPage = () => {
     const service = createDataServiceInstance();
 
     const loadData = async () => {
-        await Promise.all([
-            loadNotHierarchicalData(requestInitialValues),
-            loadHierarchicalData(requestInitialValues)
-        ]);
+        const promises = [
+            await loadNotHierarchicalData(requestInitialValues),
+            await loadHierarchicalData(requestInitialValues)
+        ];
+
+        const [notHierarchical, hierarchical] = await Promise.all(promises);
+
+        setChartsData({
+            hierarchical, notHierarchical
+        })
     };
 
     useEffect(() => {
@@ -107,14 +113,12 @@ const MainPage = () => {
         ];
 
         const [continents, countries, cities] = await Promise.all(promises);
-        setChartsData({
-            ...chartsData,
-            notHierarchical: {
-                continents,
-                countries,
-                cities
-            }
-        })
+
+        return {
+            continents,
+            countries,
+            cities
+        };
     };
 
     const loadHierarchicalData = async (settings: SettingsI) => {
@@ -125,22 +129,26 @@ const MainPage = () => {
         ];
 
         const [continents, countries, cities] = await Promise.all(promises);
-        setChartsData({
-            ...chartsData,
-            hierarchical: {
-                continents,
-                countries,
-                cities
-            }
-        })
+
+        return {
+            continents,
+            countries,
+            cities
+        };
     };
 
 
     const onSave = async (settings: SettingsI) => {
-        await Promise.all([
-            loadNotHierarchicalData(settings),
-            loadHierarchicalData(settings)
-        ]);
+        const promises = [
+            await loadNotHierarchicalData(settings),
+            await loadHierarchicalData(settings)
+        ];
+
+        const [notHierarchical, hierarchical] = await Promise.all(promises);
+
+        setChartsData({
+            hierarchical, notHierarchical
+        })
     };
 
     return (

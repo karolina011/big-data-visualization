@@ -11,9 +11,9 @@ const Charts: React.FC<ChartsProps> = ({data}) => {
 
     return (
         <>
-            <PieChartSection hierarchicalData={data.hierarchical.continents} notHierarchicalData={data.notHierarchical.continents}/>
-            {/*<PieChartSection hierarchicalData={data.hierarchical.countries} notHierarchicalData={data.notHierarchical.countries}/>*/}
-            {/*<PieChartSection hierarchicalData={data.hierarchical.cities} notHierarchicalData={data.notHierarchical.cities}/>*/}
+            <PieChartSection hierarchicalData={data.hierarchical.continents} notHierarchicalData={data.notHierarchical.continents} title={'Continents'}/>
+            <PieChartSection hierarchicalData={data.hierarchical.countries} notHierarchicalData={data.notHierarchical.countries} title={'Countries'}/>
+            <PieChartSection hierarchicalData={data.hierarchical.cities} notHierarchicalData={data.notHierarchical.cities} title={'Cities'}/>
         </>
     );
 };

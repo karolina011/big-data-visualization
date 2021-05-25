@@ -6,16 +6,45 @@ export enum aggregatedTypes {
 
 export type AggregatedType = aggregatedTypes.CONTINENT | aggregatedTypes.COUNTRY | aggregatedTypes.CITY
 
-export enum Continents {
-    SOUTH_AMERICA   = 'South America',
-    NORTH_AMERICA   = 'North America',
-    EUROPE          = 'Europe',
-    ASIA            = 'Asia',
-    AUSTRALIA       = 'Australia',
-    AFRICA          = 'Africa',
+// export enum Continents {
+//     SOUTH_AMERICA   = 'South America',
+//     NORTH_AMERICA   = 'North America',
+//     EUROPE          = 'Europe',
+//     ASIA            = 'Asia',
+//     AUSTRALIA       = 'Australia',
+//     AFRICA          = 'Africa',
+// }
+
+// export type Continent = Continents.SOUTH_AMERICA | Continents.NORTH_AMERICA | Continents.EUROPE | Continents.ASIA | Continents.AUSTRALIA | Continents.AFRICA
+
+export enum Continents  {
+    CENTRAL_ASIA               = 'Central Asia',
+    EAST_ASIA                  = 'East Asia',
+    SOUTH_ASIA                 = 'South Asia',
+    SOUTHEAST_ASIA             = 'Southeast Asia',
+    AUSTRALIA_AND_OCEANIA      = 'Australasia & Oceania',
+    EASTERN_EUROPE             = 'Eastern Europe',
+    WESTERN_EUROPE             = 'Western Europe',
+    MIDDLE_EAST_NORTH_AFRICA   = 'Middle East & North Africa',
+    SUB_SAHARAN_AFRICA         = 'Sub-Saharan Africa',
+    NORTH_AMERICA              = 'North America',
+    SOUTH_AMERICA              = 'South America',
+    CENTRAL_AMERICA_CARIBBEAN  = 'Central America & Caribbean',
 }
 
-export type Continent = Continents.SOUTH_AMERICA | Continents.NORTH_AMERICA | Continents.EUROPE | Continents.ASIA | Continents.AUSTRALIA | Continents.AFRICA
+export type Continent =
+    Continents.CENTRAL_ASIA |
+    Continents.EAST_ASIA |
+    Continents.SOUTH_ASIA |
+    Continents.SOUTHEAST_ASIA |
+    Continents.AUSTRALIA_AND_OCEANIA |
+    Continents.EASTERN_EUROPE |
+    Continents.WESTERN_EUROPE |
+    Continents.MIDDLE_EAST_NORTH_AFRICA |
+    Continents.SUB_SAHARAN_AFRICA |
+    Continents.NORTH_AMERICA |
+    Continents.SOUTH_AMERICA |
+    Continents.CENTRAL_AMERICA_CARIBBEAN
 
 export enum AttackTypes {
     ALL                     = 'All',

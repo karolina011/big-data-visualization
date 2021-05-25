@@ -16,29 +16,49 @@ export default class ChartsController {
   async getChartData(req: Request, res: Response, next: NextFunction): Promise<Response | undefined> {
     try {
       const params = req.query;
-      params.aggregated = params.aggregated ? JSON.parse(params.aggregated as unknown as string) : undefined;
-      params.yearsRange = params.yearsRange ? JSON.parse(params.yearsRange as unknown as string) : undefined;
-      params.top = params.top ? JSON.parse(params.top as unknown as string) : undefined;
-      params.attackType = params.attackType ? JSON.parse(params.attackType as unknown as string) : undefined;
-      //@ts-ignore
-      const allowedRegions = this.getParsedContinents(params.aggregated.allowedContinents);
-      const repo = new ChartsRepository();
 
+      params.aggregated = params.aggregated ? JSON.parse(params.aggregated as unknown as string) : undefined;
+
+      //@ts-ignore
+      // const allowedRegions = this.getParsedContinents(params.aggregated.allowedContinents);
+      const repo = new ChartsRepository();
+      let start = 0;
+      let end = 0;
       let body: any = undefined;
       //@ts-ignore
-      switch (params.aggregated.type) {
+      switch (params.dataType) {
+
         case AggregatedTypes.CITY:
+          start = Date.now();
           //@ts-ignore
           body = await repo.getByCity(params);
+          end = Date.now();
+          body = {
+            data: body,
+            time: (end - start)/1000
+          };
           break;
+
         case AggregatedTypes.COUNTRY:
+          start = Date.now();
           //@ts-ignore
-          body = await repo.getByCountries(params, allowedRegions);
+          body = await repo.getByCountries(params, params.aggregated.allowedContinents);
+          end = Date.now();
+          body = {
+            data: body,
+            time: (end - start)/1000
+          };
           break;
+
         case AggregatedTypes.CONTINENT:
+          start = Date.now();
           //@ts-ignore
-          body = await repo.getByContinents(params, allowedRegions);
-          body = this.getParsedRegions(body);
+          body = await repo.getByContinents(params);
+          end = Date.now();
+          body = {
+            data: body,
+            time: (end - start)/1000
+          };
           break;
       }
 
@@ -62,65 +82,12 @@ export default class ChartsController {
       const params = req.query;
       const repo = new ChartsRepository();
       //@ts-ignore
-      const body = await repo.getCountries(params.continent);
+      const body = await repo.getCountriesList(params.continent);
 
       return res.status(200).json(body);
     } catch (e) {
       console.log(e);
       next();
     }
-  }
-
-  /**
-   * Parsed regions from DB to continents
-   *
-   * @param regions
-   */
-  getParsedRegions(regions: Body[]) {
-
-    const getSum = (list: DbRegions[]) => {
-      return regions.filter(item => list.includes(item.name)).reduce((prev, item) => prev + item.value, 0);
-    };
-
-    const out = [{
-      name: Continents.EUROPE,
-      value: getSum(RegionGroups[Continents.EUROPE])
-    }, {
-      name: Continents.ASIA,
-      value: getSum(RegionGroups[Continents.ASIA])
-    }, {
-      name: Continents.SOUTH_AMERICA,
-      value: getSum(RegionGroups[Continents.SOUTH_AMERICA])
-    }, {
-      name: Continents.NORTH_AMERICA,
-      value: getSum(RegionGroups[Continents.NORTH_AMERICA])
-    }, {
-      name: Continents.AUSTRALIA,
-      value: getSum(RegionGroups[Continents.AUSTRALIA])
-    }, {
-      name: Continents.AFRICA,
-      value: getSum(RegionGroups[Continents.AFRICA])
-    }];
-
-    return out;
-  };
-
-  /**
-   * Parsed continents to regions available in DB
-   *
-   * @param allowedContinents
-   * @param aggregatedType
-   */
-  getParsedContinents(allowedContinents: string[], aggregatedType: AggregatedType) {
-
-    let allowed :string[] = [];
-
-    for (let item of Object.values(Continents)) {
-      if (allowedContinents.includes(item) || aggregatedType == AggregatedTypes.CONTINENT){
-        allowed =allowed.concat(RegionGroups[item])
-      }
-    }
-
-    return allowed;
   }
 }

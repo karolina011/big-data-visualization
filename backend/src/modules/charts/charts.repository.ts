@@ -18,10 +18,11 @@ export default class ChartsRepository extends BaseMysqlRepository {
     }
 
     /**
+     * Return List of available countries
      *
      * @param continent
      */
-    async getCountries(continent: string): Promise<any> {
+    async getCountriesList(continent: string): Promise<any> {
 
         return this.query('SELECT country_txt as name FROM attacks GROUP BY country_txt', []);
     }
@@ -29,30 +30,12 @@ export default class ChartsRepository extends BaseMysqlRepository {
     /**
      *
      * @param requestParams
-     * @param allowedRegions
      */
-    async getByContinents(requestParams: ChartsParams, allowedRegions: string[]): Promise<Body[]> {
-
-        const specifyAttack = requestParams.attackType.type && requestParams.attackType.type !== AttackTypes.ALL;
-
-        let bindsParams: any = [
-            // allowedRegions
-        ];
-
-        if (specifyAttack) {
-            bindsParams.push(requestParams.attackType.type);
-        }
-
-        console.log(Object.values(DbRegions).length);
-        bindsParams.push(
-            requestParams?.yearsRange?.min ?? 1970,
-            requestParams.yearsRange.max ?? 2018,
-            Object.values(DbRegions).length
-        );
+    async getByContinents(requestParams: ChartsParams): Promise<Body[]> {
 
         return this.query(
-            'SELECT count(eventid) as value, region_txt as name, iyear FROM attacks WHERE ' + (specifyAttack ? ' attacktype1_txt = ? AND' : '') + '  iyear BETWEEN ? AND ? GROUP BY region_txt ORDER BY value DESC ' + (requestParams.top ? ' LIMIT ? ' : ''),
-            bindsParams) as unknown as Body[];
+            'SELECT count(eventid) as value, region_txt as name, iyear FROM attacks GROUP BY region_txt ORDER BY value DESC',
+            []) as unknown as Body[];
 
     }
 
@@ -63,24 +46,12 @@ export default class ChartsRepository extends BaseMysqlRepository {
      */
     async getByCountries(requestParams: ChartsParams, allowedRegions: string[]): Promise<any> {
 
-        const specifyAttack = requestParams.attackType.type && requestParams.attackType.type !== AttackTypes.ALL;
-
         let bindsParams: any = [
             allowedRegions
         ];
 
-        if (specifyAttack) {
-            bindsParams.push(requestParams.attackType.type);
-        }
-
-        bindsParams.push(
-            requestParams?.yearsRange?.min ?? 1970,
-            requestParams.yearsRange.max ?? 2018,
-            requestParams.top?.amount ?? 10
-        );
-
         return this.query(
-            'SELECT count(eventid) as value, country_txt as name, iyear FROM attacks WHERE region_txt IN (?) ' + (specifyAttack ? ' AND attacktype1_txt = ? ' : '') + ' AND iyear BETWEEN ? AND ? GROUP BY country_txt  ORDER BY value DESC ' + (requestParams.top ? ' LIMIT ? ' : ''),
+            'SELECT count(eventid) as value, country_txt as name, iyear FROM attacks WHERE region_txt IN (?) GROUP BY country_txt  ORDER BY value DESC LIMIT 10',
             bindsParams);
 
     }
@@ -91,24 +62,16 @@ export default class ChartsRepository extends BaseMysqlRepository {
      */
     async getByCity(requestParams: ChartsParams): Promise<any> {
 
-        const specifyAttack = requestParams.attackType.type && requestParams.attackType.type !== AttackTypes.ALL;
+        let bindsParams: any = [];
 
-        let bindsParams: any = [
-            requestParams.aggregated.allowedCountry ?? 'Afghanistan',
-        ];
-
-        if (specifyAttack) {
-            bindsParams.push(requestParams.attackType.type);
+        if (requestParams.aggregated.allowedCountry){
+            bindsParams.push(
+                requestParams.aggregated.allowedCountry,
+            );
         }
 
-        bindsParams.push(
-            requestParams?.yearsRange?.min ?? 1970,
-            requestParams.yearsRange.max ?? 2018,
-            requestParams.top?.amount ?? 10
-        );
-
         return this.query(
-            'SELECT count(eventid) as value, city as name, iyear FROM attacks WHERE country_txt = ? ' + (specifyAttack ? ' AND attacktype1_txt = ? ' : '') + '  AND iyear BETWEEN ? AND ? GROUP BY city  ORDER BY value DESC ' + (requestParams.top ? ' LIMIT ? ' : ''),
+            'SELECT count(eventid) as value, city as name, iyear FROM attacks ' + (requestParams.aggregated.allowedCountry ? ' WHERE country_txt = ? ' : '') + '  GROUP BY city  ORDER BY value DESC LIMIT 10',
             bindsParams);
 
     }

@@ -1,8 +1,6 @@
 import {QueryConfig, QueryResult, QueryResultRow} from "pg";
-import PostgresClient from "./postgres.client";
-import {response} from "express";
 import MysqlClient from "./mysql.client";
-import {Connection, Pool, Query} from "mysql";
+import {Query} from "mysql";
 import {PoolAwait} from "./mysql-await-custom";
 
 export default class BaseMysqlRepository {

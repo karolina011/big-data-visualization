@@ -24,11 +24,8 @@ const AggregatedSection: React.FC<AggregatedSectionProps> = ({settings, onChange
         allowedCountry: ''
     });
 
-    console.log(settings);
-
     const loadCountriesList = async () => {
         const data = await service.loadCountriesList();
-        console.log(data);
         setCountriesList(data);
 
         const newSets = {
@@ -110,7 +107,7 @@ const AggregatedSection: React.FC<AggregatedSectionProps> = ({settings, onChange
                 </Select>
             </Grid>
 
-            {settings.type === aggregatedTypes.COUNTRY &&
+            {/*{settings.type === aggregatedTypes.COUNTRY &&*/}
 
             <Grid item xs={12} >
                 {
@@ -130,9 +127,9 @@ const AggregatedSection: React.FC<AggregatedSectionProps> = ({settings, onChange
                     })
                 }
             </Grid>
-            }
+            {/*}*/}
 
-            {settings.type === aggregatedTypes.CITY &&
+            {countriesList.length > 0 &&
                 <>
                     <Grid item xs={12} className={classes.aggregatedOptionsTitle}>
                         Cities located in:

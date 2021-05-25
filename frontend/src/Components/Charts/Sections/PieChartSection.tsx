@@ -4,31 +4,29 @@ import {Cell, Legend, Pie, PieChart, ResponsiveContainer} from "recharts";
 import useStyles from "../../Settings/Settings.style";
 import {RequestData} from "../../../Types/Charts";
 
-const COLORS = ['#000e2e', '#011673', '#0020b0', '#002ae8', '#0051ff', '#007bff', '#00a2ff', '#00ccff', '#00c6d4', '#00d6c9'];
+const COLORS = ['#000e2e', '#011673', '#0020b0', '#002ae8', '#0051ff', '#007bff', '#00a2ff', '#00ccff', '#00c6d4', '#00d6c9', '#0dd689', '#0dd689', '#14d60d'];
 
 interface PieChartSectionProps {
     hierarchicalData: RequestData;
     notHierarchicalData: RequestData;
+    title?: string;
 }
 
-const PieChartSection: React.FC<PieChartSectionProps> = ({hierarchicalData, notHierarchicalData}) =>{
+const PieChartSection: React.FC<PieChartSectionProps> = ({hierarchicalData, notHierarchicalData, title}) =>{
 
     const classes = useStyles();
 
-    console.log('-------------------');
-    console.log(notHierarchicalData);
-    console.log(hierarchicalData);
     return (
         <Grid container justify='center' className={classes.chartContainer}>
             <Grid item sm={12} className={classes.chartTitle}>
-                Pie Chart
+                {title}
             </Grid>
             <Grid container>
                 <Grid item sm={6} className={classes.time}>
-                    Time: {notHierarchicalData.time}
+                    Time: {notHierarchicalData.time} s
                 </Grid>
                 <Grid item sm={6} className={classes.time}>
-                    Time: {notHierarchicalData.time}
+                    Time: {hierarchicalData.time} s
                 </Grid>
             </Grid>
             <Grid container>
@@ -36,11 +34,10 @@ const PieChartSection: React.FC<PieChartSectionProps> = ({hierarchicalData, notH
                     <ResponsiveContainer width="100%" height="100%">
                         <PieChart width={400} height={1000}>
                             <Legend
-                                style={{marginTop: '5vh'}}
+                                style={{marginTop: '4vh', height: 'auto'}}
                                 layout='horizontal'
                                 align='center'
                                 verticalAlign='bottom'
-                                height={36}
                             />
                             <Pie
                                 data={notHierarchicalData.data}
@@ -64,14 +61,13 @@ const PieChartSection: React.FC<PieChartSectionProps> = ({hierarchicalData, notH
                     <ResponsiveContainer width="100%" height="100%">
                         <PieChart width={400} height={300}>
                             <Legend
-                                style={{marginTop: '5vh'}}
+                                style={{marginTop: '4vh', height: 'auto'}}
                                 layout='horizontal'
                                 align='center'
                                 verticalAlign='bottom'
-                                height={36}
                             />
                             <Pie
-                                data={notHierarchicalData.data}
+                                data={hierarchicalData.data}
                                 cx={'50%'}
                                 cy={'50%'}
                                 outerRadius={150}
@@ -80,7 +76,7 @@ const PieChartSection: React.FC<PieChartSectionProps> = ({hierarchicalData, notH
                                 dataKey="value"
                                 label
                             >
-                                {notHierarchicalData?.data?.map((entry, index) => (
+                                {hierarchicalData?.data?.map((entry, index) => (
                                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                 ))}
                             </Pie>

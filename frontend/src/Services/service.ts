@@ -24,24 +24,9 @@ export default class DataService {
     }
 
     async loadChartData(params: SettingsI, hierarchical: boolean): Promise<any> {
-        if(hierarchical){
-
-        }
-        return this.client.get('/charts/chart-data', {params}).then(data => data.data);
+        const url = hierarchical ? '/charts/chart-hierarchical-data' : '/charts/chart-data';
+        return this.client.get(url, {params}).then(data => data.data);
     };
-
-
-
-
-
-    // /**
-    //  *
-    //  * @param {CheckinsChartFilters} params
-    //  * @returns {Promise<CheckinsChart>}
-    //  */
-    // async loadChartData(params: SettingsI): Promise<any> {
-    //     return this.client.get('/charts/chart-data', {params}).then(data => data.data);
-    // }
 
     async loadCountriesList(): Promise<any> {
         return this.client.get('/charts/countries-list').then(data => data.data);
@@ -49,12 +34,13 @@ export default class DataService {
 }
 
 let service: DataService;
+
 /**
  *
  * @returns {Promise<DataService>}
  */
 export function createDataServiceInstance(): DataService {
-    if(!service) {
+    if (!service) {
         const {api: {url}} = loadSettings();
         service = new DataService(url);
     }
